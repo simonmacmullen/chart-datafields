@@ -103,10 +103,10 @@ class HrDataField extends Ui.DataField {
 
     function text_outline(dc, x, y, font, s) {
         dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        text(dc, x-1, y, font, s);
-        text(dc, x+1, y, font, s);
-        text(dc, x, y-1, font, s);
-        text(dc, x, y+1, font, s);
+        text(dc, x-2, y, font, s);
+        text(dc, x+2, y, font, s);
+        text(dc, x, y-2, font, s);
+        text(dc, x, y+2, font, s);
         dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
         text(dc, x, y, font, s);
     }
