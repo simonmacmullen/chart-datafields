@@ -7,12 +7,18 @@ class Chart {
         model = a_model;
     }
 
-    function draw(dc, x1, y1, x2, y2,
-                  line_color, block_color, draw_min_max, draw_axes) {
+    function draw(dc, x1y1x2y2,
+                  line_color, block_color,
+                  range_min_size, draw_min_max, draw_axes, formatter) {
+        // Work around 10 arg limit!
+        var x1 = x1y1x2y2[0];
+        var y1 = x1y1x2y2[1];
+        var x2 = x1y1x2y2[2];
+        var y2 = x1y1x2y2[3];
+
         var data = model.get_values();
 
         var range_border = 5;
-        var range_min_size = 30;
 
         var width = x2 - x1;
         var height = y2 - y1;
@@ -57,10 +63,10 @@ class Chart {
             dc.setColor(line_color, Graphics.COLOR_TRANSPARENT);
             label_text(dc, item_x(model.get_min_i(), x1, width, data.size()),
                        item_y(min, y2, height, range_min, range_max),
-                       x1, y1, x2, y2, "" + min, false);
+                       x1, y1, x2, y2, formatter.fmt_num(min), false);
             label_text(dc, item_x(model.get_max_i(), x1, width, data.size()),
                        item_y(max, y2, height, range_min, range_max),
-                       x1, y1, x2, y2, "" + max, true);
+                       x1, y1, x2, y2, formatter.fmt_num(max), true);
         }
 
         if (draw_axes) {

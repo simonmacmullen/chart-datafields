@@ -9,11 +9,6 @@ using Toybox.Application as App;
 var view;
 var model;
 
-enum {
-    MODE_HR,
-    MODE_PACE
-}
-
 class ChartDataField extends Ui.DataField {
     var chart;
 
@@ -42,33 +37,24 @@ class ChartDataField extends Ui.DataField {
         var width = dc.getWidth();
         var height = dc.getHeight();
 
-        var block_color;
-        var label;
-        if (mode == MODE_PACE) {
-            block_color = Graphics.COLOR_BLUE;
-            label = "PACE";
-        }
-        else {
-            block_color = Graphics.COLOR_RED;
-            label = "HR";
-        }
-
         // TODO this is maybe just a tiny bit too ad-hoc
         if (width == 218 && height == 218) {
             // Fenix 3 full screen, copy the widget
-            text(dc, 109, 15, Graphics.FONT_TINY, label);
+            text(dc, 109, 15, Graphics.FONT_TINY, mode.label);
             text(dc, 109, 45, Graphics.FONT_NUMBER_MEDIUM,
                  fmt_num(model.get_current()));
-            chart.draw(dc, 23, 75, 195, 172,
-                       Graphics.COLOR_BLACK, block_color, true, true);
+            chart.draw(dc, [23, 75, 195, 172],
+                       Graphics.COLOR_BLACK, mode.block_color,
+                       mode.range_min_size, true, true, mode);
         }
         else if (width == 205 && height == 148) {
             // Vivoactive, FR920xt, Epix full screen, copy the widget
-            text(dc, 70, 25, Graphics.FONT_MEDIUM, label);
+            text(dc, 70, 25, Graphics.FONT_MEDIUM, mode.label);
             text(dc, 120, 25, Graphics.FONT_NUMBER_MEDIUM,
                  fmt_num(model.get_current()));
-            chart.draw(dc, 10, 45, 195, 120,
-                       Graphics.COLOR_BLACK, block_color, true, true);
+            chart.draw(dc, [10, 45, 195, 120],
+                       Graphics.COLOR_BLACK, mode.block_color,
+                       mode.range_min_size, true, true, mode);
         }
         else {
             // Part of the screen
@@ -79,7 +65,6 @@ class ChartDataField extends Ui.DataField {
             var label_y = 15;
             
             var flags = getObscurityFlags();
-
             if (flags == OBSCURE_LEFT) {
                 x1 += 15;
             }
@@ -128,9 +113,9 @@ class ChartDataField extends Ui.DataField {
                 fh += dc.getFontHeight(Graphics.FONT_XTINY);
             }
             
-            chart.draw(dc, x1, y1, x2, y2,
-                       Graphics.COLOR_BLACK, block_color,
-                       false, false);
+            chart.draw(dc, [x1, y1, x2, y2],
+                       Graphics.COLOR_BLACK, mode.block_color, 0,
+                       false, false, mode);
 
             var text_center_x = (x1 + x2) / 2;
             var text_center_y = label_y + fh / 2;
@@ -145,7 +130,7 @@ class ChartDataField extends Ui.DataField {
                              fmt_num(model.get_max()));
             }
             
-            text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, label);
+            text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, mode.label);
         }
     }
 
@@ -153,11 +138,8 @@ class ChartDataField extends Ui.DataField {
         if (num == null) {
             return "---";
         }
-        else if (mode == MODE_PACE) {
-            return num.toLong() + ":" + (num * 60).toLong() % 60;
-        }
         else {
-            return "" + num;
+            return mode.fmt_num(num);
         }
     }
 
@@ -177,19 +159,7 @@ class ChartDataField extends Ui.DataField {
     }
 
     function compute(activityInfo) {
-        var val;
-        if (mode == MODE_PACE) {
-            if (activityInfo.currentSpeed == null or
-                activityInfo.currentSpeed < 0.1) {
-                val = null;
-            }
-            else {
-                val = 16.666667 / activityInfo.currentSpeed;
-            }
-        }
-        else {
-            val = activityInfo.currentHeartRate;
-        }
+        var val = mode.compute(activityInfo);
         model.new_value(val);
         return val;
     }
