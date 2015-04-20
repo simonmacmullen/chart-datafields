@@ -21,25 +21,8 @@ class Chart {
         var x_next;
         var item;
 
-        var min = 999999;
-        var max = 0;
-        var min_i = 0;
-        var max_i = 0;
-
-        for (var i = 0; i < data.size(); i++) {
-            item = data[i];
-            if (item != null) {
-                if (item < min) {
-                    min_i = i;
-                    min = item;
-                }
-                
-                if (item > max) {
-                    max_i = i;
-                    max = item;
-                }
-            }
-        }
+        var min = model.get_min();
+        var max = model.get_max();
 
         var range_min = min - range_border;
         var range_max = max + range_border;
@@ -73,10 +56,10 @@ class Chart {
 
         if (max != 0 and min != max) {
             dc.setColor(min_max_color, Graphics.COLOR_TRANSPARENT);
-            label_text(dc, item_x(min_i, x1, width, data.size()),
+            label_text(dc, item_x(model.get_min_i(), x1, width, data.size()),
                        item_y(min, y2, height, range_min, range_max),
                        x1, y1, x2, y2, "" + min, false);
-            label_text(dc, item_x(max_i, x1, width, data.size()),
+            label_text(dc, item_x(model.get_max_i(), x1, width, data.size()),
                        item_y(max, y2, height, range_min, range_max),
                        x1, y1, x2, y2, "" + max, true);
         }
