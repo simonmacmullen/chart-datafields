@@ -35,8 +35,8 @@ class ChartModel {
         }
     }
 
-    function get_current_str() {
-        return current == null ? "---" : "" + current;
+    function get_current() {
+        return current;
     }
 
     function get_min() {

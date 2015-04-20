@@ -1,5 +1,5 @@
 <iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="1">
-    <iq:application entry="HrDataFieldApp" id="39d1d6f86be349fe83e8990bde341d3a" launcherIcon="LauncherIcon" name="AppName" type="datafield">
+    <iq:application entry="ChartDataFieldApp" id="39d1d6f86be349fe83e8990bde341d3a" launcherIcon="LauncherIcon" name="AppName" type="datafield">
 
         <iq:products>
             <iq:product id="fenix3"/>

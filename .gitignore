@@ -1,2 +1,4 @@
 *~
 bin
+resources/strings.xml
+src/mode.mc

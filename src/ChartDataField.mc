@@ -9,7 +9,12 @@ using Toybox.Application as App;
 var view;
 var model;
 
-class HrDataField extends Ui.DataField {
+enum {
+    MODE_HR,
+    MODE_PACE
+}
+
+class ChartDataField extends Ui.DataField {
     var chart;
 
     function initialize()
@@ -37,20 +42,33 @@ class HrDataField extends Ui.DataField {
         var width = dc.getWidth();
         var height = dc.getHeight();
 
+        var block_color;
+        var label;
+        if (mode == MODE_PACE) {
+            block_color = Graphics.COLOR_BLUE;
+            label = "PACE";
+        }
+        else {
+            block_color = Graphics.COLOR_RED;
+            label = "HR";
+        }
+
         // TODO this is maybe just a tiny bit too ad-hoc
         if (width == 218 && height == 218) {
             // Fenix 3 full screen, copy the widget
-            text(dc, 109, 15, Graphics.FONT_TINY, "HR");
-            text(dc, 109, 45, Graphics.FONT_NUMBER_MEDIUM, model.get_current_str());
+            text(dc, 109, 15, Graphics.FONT_TINY, label);
+            text(dc, 109, 45, Graphics.FONT_NUMBER_MEDIUM,
+                 fmt_num(model.get_current()));
             chart.draw(dc, 23, 75, 195, 172,
-                       Graphics.COLOR_BLACK, Graphics.COLOR_RED, true, true);
+                       Graphics.COLOR_BLACK, block_color, true, true);
         }
         else if (width == 205 && height == 148) {
             // Vivoactive, FR920xt, Epix full screen, copy the widget
-            text(dc, 70, 25, Graphics.FONT_MEDIUM, "HR");
-            text(dc, 120, 25, Graphics.FONT_NUMBER_MEDIUM, model.get_current_str());
+            text(dc, 70, 25, Graphics.FONT_MEDIUM, label);
+            text(dc, 120, 25, Graphics.FONT_NUMBER_MEDIUM,
+                 fmt_num(model.get_current()));
             chart.draw(dc, 10, 45, 195, 120,
-                       Graphics.COLOR_BLACK, Graphics.COLOR_RED, true, true);
+                       Graphics.COLOR_BLACK, block_color, true, true);
         }
         else {
             // Part of the screen
@@ -111,22 +129,35 @@ class HrDataField extends Ui.DataField {
             }
             
             chart.draw(dc, x1, y1, x2, y2,
-                       Graphics.COLOR_BLACK, Graphics.COLOR_RED,
+                       Graphics.COLOR_BLACK, block_color,
                        false, false);
 
             var text_center_x = (x1 + x2) / 2;
             var text_center_y = label_y + fh / 2;
             
             text_outline(dc, text_center_x, text_center_y,
-                         sz, model.get_current_str());
+                         sz, fmt_num(model.get_current()));
             
             if (model.get_min_max_interesting()) {
                 text_outline(dc, text_center_x, text_center_y + fh / 2,
                              Graphics.FONT_XTINY,
-                             "" + model.get_min() + "-" + model.get_max());
+                             fmt_num(model.get_min()) + "-" +
+                             fmt_num(model.get_max()));
             }
             
-            text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, "HR");
+            text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, label);
+        }
+    }
+
+    function fmt_num(num) {
+        if (num == null) {
+            return "---";
+        }
+        else if (mode == MODE_PACE) {
+            return num.toLong() + ":" + (num * 60).toLong() % 60;
+        }
+        else {
+            return "" + num;
         }
     }
 
@@ -146,13 +177,25 @@ class HrDataField extends Ui.DataField {
     }
 
     function compute(activityInfo) {
-        var val = activityInfo.currentHeartRate;
+        var val;
+        if (mode == MODE_PACE) {
+            if (activityInfo.currentSpeed == null or
+                activityInfo.currentSpeed < 0.1) {
+                val = null;
+            }
+            else {
+                val = 16.666667 / activityInfo.currentSpeed;
+            }
+        }
+        else {
+            val = activityInfo.currentHeartRate;
+        }
         model.new_value(val);
         return val;
     }
 }
 
-class HrDataFieldApp extends App.AppBase
+class ChartDataFieldApp extends App.AppBase
 {
     function onStart()
     {
@@ -161,7 +204,7 @@ class HrDataFieldApp extends App.AppBase
 
     function getInitialView()
     {
-        return [new HrDataField()];
+        return [new ChartDataField()];
     }
 
     function onStop()

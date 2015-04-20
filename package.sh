@@ -1,10 +1,14 @@
 #!/bin/sh
+MODE=$1
+[ "$MODE" = "" ] && MODE=hr
+
+./copy-mode-files.sh $MODE
 
 RESOURCE_PATH=$(find . -path './resources*.xml' | xargs | tr ' ' ':')
 
 monkeyc -e \
-    -o bin/hr-datafield.iq \
+    -o bin/$MODE-datafield.iq \
     -w \
     -z $RESOURCE_PATH \
-    -m manifest.xml \
+    -m manifest-$MODE.xml \
     src/*.mc
