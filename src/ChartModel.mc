@@ -55,6 +55,10 @@ class ChartModel {
         return max_i;
     }
 
+    function get_min_max_interesting() {
+        return max != 0 and min != max;
+    }
+
     function new_value(new_value) {
         current = new_value;
         range_mult_count++;

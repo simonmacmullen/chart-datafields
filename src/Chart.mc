@@ -8,8 +8,7 @@ class Chart {
     }
 
     function draw(dc, x1, y1, x2, y2,
-                  line_color, block_color, min_max_color,
-                  draw_axes) {
+                  line_color, block_color, draw_min_max, draw_axes) {
         var data = model.get_values();
 
         var range_border = 5;
@@ -54,8 +53,8 @@ class Chart {
             }
         }
 
-        if (max != 0 and min != max) {
-            dc.setColor(min_max_color, Graphics.COLOR_TRANSPARENT);
+        if (draw_min_max and model.get_min_max_interesting()) {
+            dc.setColor(line_color, Graphics.COLOR_TRANSPARENT);
             label_text(dc, item_x(model.get_min_i(), x1, width, data.size()),
                        item_y(min, y2, height, range_min, range_max),
                        x1, y1, x2, y2, "" + min, false);
