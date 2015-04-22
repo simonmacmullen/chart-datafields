@@ -63,13 +63,13 @@ class ChartDataField extends Ui.DataField {
             var x2 = width - 5;
             var y2 = height - 5;
             var label_y = 10;
-            
+
             var flags = getObscurityFlags();
             if (flags == OBSCURE_LEFT) {
                 x1 += 5;
             }
             else if (flags == OBSCURE_RIGHT) {
-                x2 -= 15;
+                x2 -= 5;
             }
             else if (flags == (OBSCURE_TOP | OBSCURE_LEFT)) {
                 x1 += 15;
@@ -94,7 +94,7 @@ class ChartDataField extends Ui.DataField {
                 label_y = y2 + 10;
             }
             else if (flags == (OBSCURE_TOP | OBSCURE_LEFT | OBSCURE_RIGHT)) {
-                if (y2 - y1 > 60) { // 2 field
+                if (y2 - y1 > 50) { // 2 field
                     x1 += 15;
                     x2 -= 15;
                     y1 += 10;
@@ -106,16 +106,17 @@ class ChartDataField extends Ui.DataField {
                 }
             }
             else if (flags == (OBSCURE_BOTTOM | OBSCURE_LEFT | OBSCURE_RIGHT)) {
-                y1 -= 15;
-                if (y2 - y1 > 60) { // 2 field
+                if (y2 - y1 > 50) { // 2 field
                     x1 += 15;
                     x2 -= 15;
+                    y1 -= 15;
                     y2 -= 30;
                     label_y = y2 + 15;
                 }
                 else { // 3/4 field
                     x1 += 30;
                     x2 -= 30;
+                    y1 -= 15;
                     y2 -= 20;
                     label_y = y2 + 10;
                 }
