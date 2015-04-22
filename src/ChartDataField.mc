@@ -45,92 +45,100 @@ class ChartDataField extends Ui.DataField {
                  fmt_num(model.get_current()));
             chart.draw(dc, [23, 75, 195, 172],
                        Graphics.COLOR_BLACK, mode.block_color,
-                       mode.range_min_size, true, true, mode);
+                       mode.range_min_size, true, true, false, mode);
         }
         else if (width == 205 && height == 148) {
             // Vivoactive, FR920xt, Epix full screen, copy the widget
-            text(dc, 70, 25, Graphics.FONT_MEDIUM, mode.label);
+            text(dc, 60, 25, Graphics.FONT_MEDIUM, mode.label);
             text(dc, 120, 25, Graphics.FONT_NUMBER_MEDIUM,
                  fmt_num(model.get_current()));
             chart.draw(dc, [10, 45, 195, 120],
                        Graphics.COLOR_BLACK, mode.block_color,
-                       mode.range_min_size, true, true, mode);
+                       mode.range_min_size, true, true, false, mode);
         }
         else {
             // Part of the screen
-            var x1 = 10;
-            var y1 = 10;
-            var x2 = width - 10;
-            var y2 = height - 10;
-            var label_y = 15;
+            var x1 = 5;
+            var y1 = 20;
+            var x2 = width - 5;
+            var y2 = height - 5;
+            var label_y = 10;
             
             var flags = getObscurityFlags();
             if (flags == OBSCURE_LEFT) {
-                x1 += 15;
+                x1 += 5;
             }
             else if (flags == OBSCURE_RIGHT) {
                 x2 -= 15;
             }
             else if (flags == (OBSCURE_TOP | OBSCURE_LEFT)) {
                 x1 += 15;
-                y1 += 25;
-                label_y += 15;
+                y1 += 20;
+                label_y += 20;
             }
             else if (flags == (OBSCURE_TOP | OBSCURE_RIGHT)) {
                 x2 -= 15;
-                y1 += 25;
-                label_y += 15;
+                y1 += 20;
+                label_y += 20;
             }
             else if (flags == (OBSCURE_BOTTOM | OBSCURE_LEFT)) {
                 x1 += 15;
-                y2 -= 25;
+                y1 -= 15;
+                y2 -= 35;
+                label_y = y2 + 10;
             }
             else if (flags == (OBSCURE_BOTTOM | OBSCURE_RIGHT)) {
                 x2 -= 15;
-                y2 -= 25;
+                y1 -= 15;
+                y2 -= 35;
+                label_y = y2 + 10;
             }
             else if (flags == (OBSCURE_TOP | OBSCURE_LEFT | OBSCURE_RIGHT)) {
-                x1 += 25;
-                x2 -= 25;
-                y1 += 20;
+                if (y2 - y1 > 60) { // 2 field
+                    x1 += 15;
+                    x2 -= 15;
+                    y1 += 10;
+                    label_y += 5;
+                }
+                else { // 3/4 field
+                    x1 += 30;
+                    x2 -= 30;
+                }
             }
             else if (flags == (OBSCURE_BOTTOM | OBSCURE_LEFT | OBSCURE_RIGHT)) {
-                x1 += 25;
-                x2 -= 25;
-                y2 -= 20;
+                y1 -= 15;
+                if (y2 - y1 > 60) { // 2 field
+                    x1 += 15;
+                    x2 -= 15;
+                    y2 -= 30;
+                    label_y = y2 + 15;
+                }
+                else { // 3/4 field
+                    x1 += 30;
+                    x2 -= 30;
+                    y2 -= 20;
+                    label_y = y2 + 10;
+                }
             }
-            
+        
+            dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
+            text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, mode.label);
+    
             var sz = Graphics.FONT_NUMBER_MEDIUM;
             if (y2 - y1 < 55) {
                 sz = Graphics.FONT_NUMBER_MILD;
             }
-
-            var fh = dc.getFontHeight(sz);
-            if (fh == 26) {
-                // Sigh, the font metrics on square vs round watches
-                // are not very consistent. This is the square watch
-                // case BTW.
-                fh += dc.getFontHeight(Graphics.FONT_XTINY);
+            
+            if (x2 - x1 > 100) {
+                var s = fmt_num(model.get_current());
+                x2 -= (dc.getTextWidthInPixels(s, sz) + 5);
+                dc.drawText(x2 + 5, (y1 + y2) / 2, sz, s,
+                            Graphics.TEXT_JUSTIFY_LEFT|Graphics.TEXT_JUSTIFY_VCENTER);
             }
             
             chart.draw(dc, [x1, y1, x2, y2],
                        Graphics.COLOR_BLACK, mode.block_color, 0,
-                       false, false, mode);
-
-            var text_center_x = (x1 + x2) / 2;
-            var text_center_y = label_y + fh / 2;
-            
-            text_outline(dc, text_center_x, text_center_y,
-                         sz, fmt_num(model.get_current()));
-            
-            if (model.get_min_max_interesting()) {
-                text_outline(dc, text_center_x, text_center_y + fh / 2,
-                             Graphics.FONT_XTINY,
-                             fmt_num(model.get_min()) + "-" +
-                             fmt_num(model.get_max()));
-            }
-            
-            text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, mode.label);
+                       true, false, true, mode);
         }
     }
 
@@ -141,16 +149,6 @@ class ChartDataField extends Ui.DataField {
         else {
             return mode.fmt_num(num);
         }
-    }
-
-    function text_outline(dc, x, y, font, s) {
-        dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_TRANSPARENT);
-        text(dc, x-2, y, font, s);
-        text(dc, x+2, y, font, s);
-        text(dc, x, y-2, font, s);
-        text(dc, x, y+2, font, s);
-        dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-        text(dc, x, y, font, s);
     }
 
     function text(dc, x, y, font, s) {
