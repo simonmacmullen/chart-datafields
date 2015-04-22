@@ -7,4 +7,4 @@ MODE=$2
 ./copy-mode-files.sh $MODE
 
 RESOURCE_PATH=$(find . -path './resources*.xml' | xargs | tr ' ' ':')
-monkeyc -o bin/$MODE-datafield.prg -d $DEVICE -m manifest-$MODE.xml -z $RESOURCE_PATH src/*.mc
+monkeyc -o bin/$MODE-datafield.prg -d $DEVICE -m modes/$MODE/manifest.xml -z $RESOURCE_PATH src/*.mc

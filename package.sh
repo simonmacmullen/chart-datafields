@@ -10,5 +10,5 @@ monkeyc -e \
     -o bin/$MODE-datafield.iq \
     -w \
     -z $RESOURCE_PATH \
-    -m manifest-$MODE.xml \
+    -m modes/$MODE/manifest.xml \
     src/*.mc
