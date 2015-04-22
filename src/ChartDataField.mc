@@ -11,11 +11,19 @@ var model;
 
 class ChartDataField extends Ui.DataField {
     var chart;
+    var block_color;
+    var label;
+    var range_min_size;
 
     function initialize()
     {
         model = new ChartModel();
+        model.set_range_minutes(mode.get_range_minutes());
         chart = new Chart(model);
+        var items = mode.configure();
+        label          = items[0];
+        block_color    = items[1];
+        range_min_size = items[2];
     }
 
     function onLayout(dc) {
@@ -40,21 +48,21 @@ class ChartDataField extends Ui.DataField {
         // TODO this is maybe just a tiny bit too ad-hoc
         if (width == 218 && height == 218) {
             // Fenix 3 full screen, copy the widget
-            text(dc, 109, 15, Graphics.FONT_TINY, mode.label);
+            text(dc, 109, 15, Graphics.FONT_TINY, label);
             text(dc, 109, 45, Graphics.FONT_NUMBER_MEDIUM,
                  fmt_num(model.get_current()));
             chart.draw(dc, [23, 75, 195, 172],
-                       Graphics.COLOR_BLACK, mode.block_color,
-                       mode.range_min_size, true, true, false, mode);
+                       Graphics.COLOR_BLACK, block_color,
+                       range_min_size, true, true, false, mode);
         }
         else if (width == 205 && height == 148) {
             // Vivoactive, FR920xt, Epix full screen, copy the widget
-            text(dc, 60, 25, Graphics.FONT_MEDIUM, mode.label);
+            text(dc, 60, 25, Graphics.FONT_MEDIUM, label);
             text(dc, 120, 25, Graphics.FONT_NUMBER_MEDIUM,
                  fmt_num(model.get_current()));
             chart.draw(dc, [10, 45, 195, 120],
-                       Graphics.COLOR_BLACK, mode.block_color,
-                       mode.range_min_size, true, true, false, mode);
+                       Graphics.COLOR_BLACK, block_color,
+                       range_min_size, true, true, false, mode);
         }
         else {
             // Part of the screen
@@ -123,7 +131,7 @@ class ChartDataField extends Ui.DataField {
             }
         
             dc.setColor(Graphics.COLOR_BLACK, Graphics.COLOR_TRANSPARENT);
-            text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, mode.label);
+            text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, label);
     
             var sz = Graphics.FONT_NUMBER_MEDIUM;
             if (y2 - y1 < 55) {
@@ -138,7 +146,7 @@ class ChartDataField extends Ui.DataField {
             }
             
             chart.draw(dc, [x1, y1, x2, y2],
-                       Graphics.COLOR_BLACK, mode.block_color, 0,
+                       Graphics.COLOR_BLACK, block_color, 0,
                        true, false, true, mode);
         }
     }

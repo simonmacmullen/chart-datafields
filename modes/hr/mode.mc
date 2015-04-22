@@ -1,11 +1,8 @@
 // -*- mode: Javascript;-*-
 
-class Mode {
-    var block_color = Graphics.COLOR_RED;
-    var label = "HR";
-    var range_min_size = 30;
-    function fmt_num(num) {
-        return "" + num;
+class Mode extends BaseMode {
+    function configure() {
+        return ["HR", Graphics.COLOR_RED, 30];
     }
 
     function compute(activityInfo) {

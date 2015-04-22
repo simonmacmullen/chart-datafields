@@ -2,17 +2,19 @@
 
 using Toybox.System as System;
 
-class Mode {
-    var block_color = Graphics.COLOR_BLUE;
-    var label = "PACE";
-    var range_min_size = 60;
-    var metres = (System.getDeviceSettings().paceUnits == System.UNIT_METRIC) ?
-        1000 :
-        1609; // Metres in a mile
+class Mode extends BaseMode {
+    function configure() {
+        return ["PACE", Graphics.COLOR_BLUE, 60];
+    }
 
     function fmt_num(num) {
         return (num / 60) + ":" + (num % 60).format("%02d");
     }
+
+    var metres =
+        (System.getDeviceSettings().paceUnits == System.UNIT_METRIC) ?
+        1000 :
+        1609; // Metres in a mile
 
     function compute(activityInfo) {
         if (activityInfo.currentSpeed == null or
