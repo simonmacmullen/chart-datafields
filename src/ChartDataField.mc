@@ -61,7 +61,7 @@ class ChartDataField extends Ui.DataField {
             text(dc, 60, 25, Graphics.FONT_MEDIUM, label);
             text(dc, 120, 25, Graphics.FONT_NUMBER_MEDIUM,
                  fmt_num(model.get_current()));
-            chart.draw(dc, [10, 45, 195, 120],
+            chart.draw(dc, [10, 45, 195, 135],
                        Graphics.COLOR_BLACK, block_color,
                        range_min_size, true, true, false, mode);
         }
