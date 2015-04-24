@@ -40,7 +40,13 @@ class Chart {
         var y_old = null;
         for (var x = x1; x <= x2; x++) {
             item = data[x_item(x, x1, width, data.size())];
-            if (item != null) {
+            if (item != null && item > range_max) {
+                dc.setColor(block_color, Graphics.COLOR_TRANSPARENT);
+                dc.drawLine(x, y1, x, y2);
+                x_old = null;
+                y_old = null;
+            }
+            else if (item != null && item >= range_min) {
                 var y = item_y(item, y2, height, range_min, range_max);
                 dc.setColor(block_color, Graphics.COLOR_TRANSPARENT);
                 dc.drawLine(x, y, x, y2);
