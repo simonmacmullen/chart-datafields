@@ -134,10 +134,6 @@ class ChartDataField extends Ui.DataField {
             text(dc, (x1 + x2) / 2, label_y, Graphics.FONT_TINY, label);
     
             var sz = Graphics.FONT_NUMBER_MEDIUM;
-            if (y2 - y1 < 55) {
-                sz = Graphics.FONT_NUMBER_MILD;
-            }
-            
             if (x2 - x1 > 100) {
                 var s = fmt_num(model.get_current());
                 x2 -= (dc.getTextWidthInPixels(s, sz) + 5);
