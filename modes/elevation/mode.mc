@@ -8,7 +8,7 @@ class Mode extends BaseMode {
     }
 
     function get_range_minutes() {
-        return 10;
+        return 120;
     }
 
     var multiplier =
