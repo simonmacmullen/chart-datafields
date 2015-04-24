@@ -39,6 +39,7 @@ class ChartModel {
         if (new_mult != range_mult) {
             range_mult = new_mult;
             values = new [values_size];
+            update_stats();
         }
     }
 
@@ -95,9 +96,8 @@ class ChartModel {
             next = 0;
             range_mult_count = 0;
             range_mult_count_not_null = 0;
+            update_stats();
         }
-
-        update_stats();
     }
 
     function update_stats() {
