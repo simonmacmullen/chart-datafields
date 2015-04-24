@@ -4,7 +4,8 @@ using Toybox.System as System;
 
 class Mode extends BaseMode {
     function configure() {
-        return ["PACE", Graphics.COLOR_BLUE, 60];
+        // label, color, min vertical range, ignore SD
+        return ["PACE", Graphics.COLOR_BLUE, 60, 1];
     }
 
     function fmt_num(num) {

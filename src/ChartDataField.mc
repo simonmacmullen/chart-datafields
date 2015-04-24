@@ -21,9 +21,10 @@ class ChartDataField extends Ui.DataField {
         model.set_range_minutes(mode.get_range_minutes());
         chart = new Chart(model);
         var items = mode.configure();
-        label          = items[0];
-        block_color    = items[1];
-        range_min_size = items[2];
+        label             = items[0];
+        block_color       = items[1];
+        range_min_size    = items[2];
+        model.set_ignore_sd(items[3]);
     }
 
     function onLayout(dc) {

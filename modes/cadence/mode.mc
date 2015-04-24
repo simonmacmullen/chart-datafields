@@ -2,7 +2,8 @@
 
 class Mode extends BaseMode {
     function configure() {
-        return ["CAD", Graphics.COLOR_YELLOW, 10];
+        // label, color, min vertical range, ignore SD
+        return ["CAD", Graphics.COLOR_YELLOW, 10, null];
     }
 
     function compute(activityInfo) {

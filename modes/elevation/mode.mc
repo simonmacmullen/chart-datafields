@@ -4,7 +4,8 @@ using Toybox.System as System;
 
 class Mode extends BaseMode {
     function configure() {
-        return ["ELEV", Graphics.COLOR_DK_GREEN, 30];
+        // label, color, min vertical range, ignore SD
+        return ["ELEV", Graphics.COLOR_DK_GREEN, 30, null];
     }
 
     function get_range_minutes() {

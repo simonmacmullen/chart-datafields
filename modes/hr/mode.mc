@@ -2,7 +2,8 @@
 
 class Mode extends BaseMode {
     function configure() {
-        return ["HR", Graphics.COLOR_RED, 30];
+        // label, color, min vertical range, ignore SD
+        return ["HR", Graphics.COLOR_RED, 30, null];
     }
 
     function compute(activityInfo) {
