@@ -60,6 +60,13 @@ class Chart {
             }
         }
 
+        if (draw_axes) {
+            dc.setColor(line_color, Graphics.COLOR_TRANSPARENT);
+            tick_line(dc, x1, y1, y2, -5, true);
+            tick_line(dc, x2, y1, y2, 5, true);
+            tick_line(dc, y2, x1, x2 + 1, 5, false);
+        }
+
         if (draw_min_max and model.get_min_max_interesting()) {
             dc.setColor(line_color, Graphics.COLOR_TRANSPARENT);
             var bg_color = line_color == Graphics.COLOR_WHITE
@@ -72,13 +79,6 @@ class Chart {
                        item_y(max, y2, height, range_min, range_max),
                        x1y1x2y2, line_color, bg_color, formatter.fmt_num(max),
                        strict_min_max_bounding, true);
-        }
-
-        if (draw_axes) {
-            dc.setColor(line_color, Graphics.COLOR_TRANSPARENT);
-            tick_line(dc, x1, y1, y2, -5, true);
-            tick_line(dc, x2, y1, y2, 5, true);
-            tick_line(dc, y2, x1, x2 + 1, 5, false);
         }
     }
 
