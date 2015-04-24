@@ -9,6 +9,8 @@ class ChartModel {
     var values;
     var range_mult;
     var range_mult_count = 0;
+    var range_mult_count_not_null = 0;
+    var next = 0;
 
     var min;
     var max;
@@ -61,13 +63,20 @@ class ChartModel {
 
     function new_value(new_value) {
         current = new_value;
+        if (current != null) {
+            next += current;
+            range_mult_count_not_null++;
+        }
         range_mult_count++;
         if (range_mult_count >= range_mult) {
             for (var i = 1; i < values.size(); i++) {
                 values[i-1] = values[i];
             }
-            values[values.size() - 1] = current;
+            values[values.size() - 1] = range_mult_count_not_null == 0 ?
+                null : (next / range_mult_count_not_null);
+            next = 0;
             range_mult_count = 0;
+            range_mult_count_not_null = 0;
         }
 
         update_min_max();
