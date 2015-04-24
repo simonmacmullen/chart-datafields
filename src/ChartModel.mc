@@ -5,6 +5,8 @@ using Toybox.System as System;
 using Toybox.Application as App;
 
 class ChartModel {
+    var ignore_sd = null;
+
     var current = null;
     var values_size = 150;
     var values;
@@ -38,6 +40,11 @@ class ChartModel {
             range_mult = new_mult;
             values = new [values_size];
         }
+    }
+
+    // i.e. ignore values more than i standard deviations from the mean
+    function set_ignore_sd(i) {
+        ignore_sd = i;
     }
 
     function get_current() {
@@ -124,9 +131,18 @@ class ChartModel {
             sd = Math.sqrt(s / n);
         }
 
+        var ignore = null;
+        if (sd != null && ignore_sd != null) {
+            ignore = ignore_sd * sd;
+        }
+
         for (var i = 0; i < values.size(); i++) {
             var item = values[i];
             if (item != null) {
+                if (ignore != null &&
+                    (item > mean + ignore || item < mean - ignore)) {
+                    continue;
+                }
                 if (item < min) {
                     min_i = i;
                     min = item;
