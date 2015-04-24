@@ -1,5 +1,6 @@
 // -*- mode: Javascript;-*-
 
+using Toybox.Math as Math;
 using Toybox.System as System;
 using Toybox.Application as App;
 
@@ -16,6 +17,8 @@ class ChartModel {
     var max;
     var min_i;
     var max_i;
+    var mean;
+    var sd;
 
     function initialize() {
         set_range_minutes(2.5);
@@ -61,6 +64,14 @@ class ChartModel {
         return max != 0 and min != max;
     }
 
+    function get_mean() {
+        return mean;
+    }
+
+    function get_sd() {
+        return sd;
+    }
+
     function new_value(new_value) {
         current = new_value;
         if (current != null) {
@@ -79,14 +90,39 @@ class ChartModel {
             range_mult_count_not_null = 0;
         }
 
-        update_min_max();
+        update_stats();
     }
 
-    function update_min_max() {
+    function update_stats() {
         min = 999999;
         max = 0;
         min_i = 0;
         max_i = 0;
+
+        var m = 0f;
+        var s = 0f;
+        var total = 0f;
+        var n = 0;
+
+        for (var i = 0; i < values.size(); i++) {
+            var item = values[i];
+            if (item != null) {
+                // Welford
+                n++;
+                var m2 = m;
+                m += (item - m2) / n;
+                s += (item - m2) * (item - m);
+                total += item;
+            }
+        }
+        if (n == 0) {
+            mean = null;
+            sd = null;
+        }
+        else {
+            mean = total / n;
+            sd = Math.sqrt(s / n);
+        }
 
         for (var i = 0; i < values.size(); i++) {
             var item = values[i];
