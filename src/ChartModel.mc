@@ -88,11 +88,18 @@ class ChartModel {
     function get_range_label() {
         var range = get_range_minutes();
         if (range < 60) {
-            return range.toNumber() + " MINUTES";
+            return fmt_num_label(range) + " MINUTES";
         }
         else {
-            return (range / 60).toNumber() + " HOURS";
+            return fmt_num_label(range / 60) + " HOURS";
         }
+    }
+
+    // Grr printf
+    function fmt_num_label(num) {
+        var before = num.toNumber();
+        var after = (num * 10).toNumber() % 10;
+        return after == 0 ? before : (before + "." + after);
     }
 
     function new_value(new_value) {
