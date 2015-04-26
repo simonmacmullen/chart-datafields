@@ -9,6 +9,7 @@ class Mode extends BaseMode {
     }
 
     function fmt_num(num) {
+        num = -num;
         return (num / 60) + ":" + (num % 60).format("%02d");
     }
 
@@ -25,7 +26,8 @@ class Mode extends BaseMode {
         else {
             // NB: array of ints uses much less memory than array of
             // floats - ints stored without pointers?
-            return (metres / activityInfo.currentSpeed).toNumber();
+            // Also negativise pace to flip the chart
+            return -(metres / activityInfo.currentSpeed).toNumber();
         }
     }
 }

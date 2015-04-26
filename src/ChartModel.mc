@@ -69,7 +69,7 @@ class ChartModel {
     }
 
     function get_min_max_interesting() {
-        return max != 0 and min != max;
+        return max != -99999999 and min != max;
     }
 
     function get_mean() {
@@ -101,8 +101,8 @@ class ChartModel {
     }
 
     function update_stats() {
-        min = 999999;
-        max = 0;
+        min = 99999999;
+        max = -99999999;
         min_i = 0;
         max_i = 0;
 
