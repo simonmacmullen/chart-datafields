@@ -8,10 +8,6 @@ class Mode extends BaseMode {
         return ["ELEV", Graphics.COLOR_DK_GREEN, 30, null];
     }
 
-    function get_range_minutes() {
-        return 120;
-    }
-
     var multiplier =
         (System.getDeviceSettings().elevationUnits == System.UNIT_METRIC) ?
         1.0 :

@@ -11,6 +11,7 @@ class ChartModel {
     var values_size = 150;
     var values;
     var range_mult;
+    var range_expand = false;
     var range_mult_count = 0;
     var range_mult_count_not_null = 0;
     var next = 0;
@@ -41,6 +42,10 @@ class ChartModel {
             values = new [values_size];
             update_stats();
         }
+    }
+
+    function set_range_expand(re) {
+        range_expand = re;
     }
 
     // i.e. ignore values more than i standard deviations from the mean
@@ -88,6 +93,8 @@ class ChartModel {
         }
         range_mult_count++;
         if (range_mult_count >= range_mult) {
+            var expand = range_expand && values[0] == null && values[1] != null;
+
             for (var i = 1; i < values.size(); i++) {
                 values[i-1] = values[i];
             }
@@ -96,8 +103,24 @@ class ChartModel {
             next = 0;
             range_mult_count = 0;
             range_mult_count_not_null = 0;
+
+            if (expand) {
+                do_range_expand();
+            }
+
             update_stats();
         }
+    }
+
+    function do_range_expand() {
+        var sz = values.size();
+        for (var i = sz - 1; i >= sz / 2; i--) {
+            values[i] = values[i * 2 - sz];
+        }
+        for (var i = 0; i < sz / 2; i++) {
+            values[i] = null;
+        }
+        range_mult *= 2;
     }
 
     function update_stats() {

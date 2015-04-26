@@ -18,7 +18,8 @@ class ChartDataField extends Ui.DataField {
     function initialize()
     {
         model = new ChartModel();
-        model.set_range_minutes(mode.get_range_minutes());
+        model.set_range_minutes(7.5);
+        model.set_range_expand(true);
         chart = new Chart(model);
         var items = mode.configure();
         label             = items[0];
