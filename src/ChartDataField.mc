@@ -46,12 +46,21 @@ class ChartDataField extends Ui.DataField {
         var width = dc.getWidth();
         var height = dc.getHeight();
 
+        var duration_label;
+        if (model.get_range_minutes() < 60) {
+            duration_label = model.get_range_minutes().toNumber() + " MINUTES";
+        }
+        else {
+            duration_label = (model.get_range_minutes() / 60).toNumber() + " HOURS";
+        }
+
         // TODO this is maybe just a tiny bit too ad-hoc
         if (width == 218 && height == 218) {
             // Fenix 3 full screen, copy the widget
             text(dc, 109, 15, Graphics.FONT_TINY, label);
             text(dc, 109, 45, Graphics.FONT_NUMBER_MEDIUM,
                  fmt_num(model.get_current()));
+            text(dc, 109, 192, Graphics.FONT_XTINY, duration_label);
             chart.draw(dc, [23, 75, 195, 172],
                        Graphics.COLOR_BLACK, block_color,
                        range_min_size, true, true, false, mode);
@@ -61,7 +70,8 @@ class ChartDataField extends Ui.DataField {
             text(dc, 60, 25, Graphics.FONT_MEDIUM, label);
             text(dc, 120, 25, Graphics.FONT_NUMBER_MEDIUM,
                  fmt_num(model.get_current()));
-            chart.draw(dc, [10, 45, 195, 135],
+            text(dc, 102, 135, Graphics.FONT_XTINY, duration_label);
+            chart.draw(dc, [10, 45, 195, 120],
                        Graphics.COLOR_BLACK, block_color,
                        range_min_size, true, true, false, mode);
         }
