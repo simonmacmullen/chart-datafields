@@ -85,6 +85,16 @@ class ChartModel {
         return sd;
     }
 
+    function get_range_label() {
+        var range = get_range_minutes();
+        if (range < 60) {
+            return range.toNumber() + " MINUTES";
+        }
+        else {
+            return (range / 60).toNumber() + " HOURS";
+        }
+    }
+
     function new_value(new_value) {
         current = new_value;
         if (current != null) {
