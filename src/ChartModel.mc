@@ -8,7 +8,7 @@ class ChartModel {
     var ignore_sd = null;
 
     var current = null;
-    var values_size = 150;
+    var values_size = 150; // Must be even
     var values;
     var range_mult;
     var range_mult_max;
@@ -138,7 +138,16 @@ class ChartModel {
     function do_range_expand() {
         var sz = values.size();
         for (var i = sz - 1; i >= sz / 2; i--) {
-            values[i] = values[i * 2 - sz];
+            var old_i = i * 2 - sz;
+            var total = 0;
+            var n = 0;
+            for (var j = old_i; j < old_i + 2; j++) {
+                if (values[j] != null) {
+                    total += values[j];
+                    n++;
+                }
+            }
+            values[i] = (n > 0) ? total / n : null;
         }
         for (var i = 0; i < sz / 2; i++) {
             values[i] = null;
