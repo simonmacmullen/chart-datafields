@@ -11,6 +11,7 @@ class ChartModel {
     var values_size = 150;
     var values;
     var range_mult;
+    var range_mult_max;
     var range_expand = false;
     var range_mult_count = 0;
     var range_mult_count_not_null = 0;
@@ -42,6 +43,10 @@ class ChartModel {
             values = new [values_size];
             update_stats();
         }
+    }
+
+    function set_max_range_minutes(range) {
+        range_mult_max = range * 60 / values_size;
     }
 
     function set_range_expand(re) {
@@ -110,7 +115,8 @@ class ChartModel {
         }
         range_mult_count++;
         if (range_mult_count >= range_mult) {
-            var expand = range_expand && values[0] == null && values[1] != null;
+            var expand = range_expand && range_mult < range_mult_max &&
+                values[0] == null && values[1] != null;
 
             for (var i = 1; i < values.size(); i++) {
                 values[i-1] = values[i];
