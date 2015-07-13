@@ -8,7 +8,7 @@ class ChartModel {
     var ignore_sd = null;
 
     var current = null;
-    var values_size = 150; // Must be even
+    var values_size = 100; // Must be even
     var values;
     var range_mult;
     var range_mult_max;
